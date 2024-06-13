@@ -1,0 +1,36 @@
+module.exports = {
+  parser: '@typescript-eslint/parser',
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+  ],
+  plugins: ['@typescript-eslint', 'react', 'react-hooks'],
+  rules: {
+    'indent': ['error', 2],
+    'quotes': ['error', 'single'],
+    'semi': ['error', 'always'],
+    '@typescript-eslint/no-unused-vars': ['error'],
+    '@typescript-eslint/explicit-function-return-type': ['warn'],
+    '@typescript-eslint/no-explicit-any': 'error',
+    'space-before-function-paren': ['error', 'always'],
+    'camelcase': ['error', { properties: 'always' }],
+    'no-console': 'warn',
+    'no-var': 'error',
+    'prefer-const': 'error',
+    'object-curly-newline': ['error', { consistent: true }],
+    'no-empty-function': ['error'],
+    'react/no-danger': 'error',
+    'react/jsx-pascal-case': 'error',
+    'react/jsx-boolean-value': ['error', 'never'],
+    'react/jsx-props-no-multi-spaces': 'error',
+    'react/jsx-key': 'error',
+    'react/no-deprecated': 'error',
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+};
