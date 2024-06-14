@@ -81,11 +81,11 @@ const CardGrid = () => {
   };
 
   const flipCard = (id: number) => {
-    const newCards = cards.map(card =>
-      card.id === id ? { ...card, flipped: true } : card
-    );
-    setCards(newCards);
     if(flippedCards.length < 2) {
+      const newCards = cards.map(card =>
+        card.id === id ? { ...card, flipped: true } : card
+      );
+      setCards(newCards);
       setFlippedCards([...flippedCards, id]);
     }
   };
@@ -94,7 +94,7 @@ const CardGrid = () => {
     if(flippedCards.length === 2) {
       setTimeout( () => {checkCards();}, 1500);
     }
-  }, [checkCards, flippedCards]);
+  }, [flippedCards]);
   return(
     <div className="mx-auto grid grid-cols-4 gap-4 w-[70vw]">
       {cards.map( (card) => (
