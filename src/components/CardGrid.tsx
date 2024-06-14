@@ -1,10 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import Card from './Card';
 
-
-
+export type Card = {
+  name: string,
+  image: string,
+  flipped: boolean,
+  id: number,
+  pairId: number
+}
 const CardGrid = () => {
-  const [cards, setCards] = useState([
+  const [cards, setCards] = useState<Card[]>([
     {
       name: 'Card 1',
       image: 'string',
@@ -62,8 +67,27 @@ const CardGrid = () => {
       pairId: 4,
     },
   ]);
+
   const [matches, setMatches] = useState(0);
   const [flippedCards, setFlippedCards] = useState<Array<number>>([]);
+
+  const shuffleArray = (array: Card[]) => {
+    // Create a copy of the array to avoid modifying the original array
+    const newArray = array.slice();
+
+    // Fisher-Yates (Knuth) Shuffle Algorithm
+    for (let i = newArray.length - 1; i > 0; i--) {
+      // Pick a random index from 0 to i
+      const j = Math.floor(Math.random() * (i + 1));
+
+      // Swap elements array[i] and array[j]
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+
+    return newArray;
+  };
+
+
 
   const checkCards = () => {
     const firstCard =  cards.find( item => item.id === flippedCards[0]);
@@ -109,6 +133,7 @@ const CardGrid = () => {
       ))}
       <div className="text-2xl">Matches: {matches}</div>
       <div className="text-2xl">Flipped cards : {flippedCards.map(item => <div key={item}>{item}</div>)}</div>
+      <button onClick={() => setCards(shuffleArray(cards))}>Shuffle</button>
     </div>
   );
 };
