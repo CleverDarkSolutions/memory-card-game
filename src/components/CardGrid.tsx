@@ -109,7 +109,7 @@ const CardGrid = () => {
       const newCards = cards.map(card =>
         card.id === id ? { ...card, flipped: true } : card
       );
-      setCards(newCards);
+      setTimeout(() => setCards(newCards), 200);
       setFlippedCards([...flippedCards, id]);
     }
   };
