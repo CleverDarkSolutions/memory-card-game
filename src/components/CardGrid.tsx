@@ -128,18 +128,14 @@ const CardGrid = () => {
   const [matches, setMatches] = useState(0);
   const [flippedCards, setFlippedCards] = useState<Array<number>>([]);
   const [moves, setMoves] = useState(0);
+  const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const [status, setStatus] = useState('Start the game');
 
   const shuffleArray = (array: Card[]) => {
-    // Create a copy of the array to avoid modifying the original array
     const newArray = array.slice();
-
-    // Fisher-Yates (Knuth) Shuffle Algorithm
     for (let i = newArray.length - 1; i > 0; i--) {
-      // Pick a random index from 0 to i
       const j = Math.floor(Math.random() * (i + 1));
-
-      // Swap elements array[i] and array[j]
       [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
 
@@ -163,8 +159,16 @@ const CardGrid = () => {
     setFlippedCards([]);
   };
 
+  const resetCards = () => {
+    const newCards = cards.map(card => ({
+      ...card,
+      flipped: false
+    }));
+    setCards(newCards);
+  };
+
   const flipCard = (id: number) => {
-    if(flippedCards.length < 2) {
+    if(flippedCards.length < 2 && isActive) {
       const newCards = cards.map(card =>
         card.id === id ? { ...card, flipped: true } : card
       );
@@ -187,13 +191,28 @@ const CardGrid = () => {
   }, [matches]);
   return(
     <div>
-      <div className="absolute top-8 left-8">
-        <button className="bg-blue-400 text-white rounded h-12 w-32" onClick={() => {
+      <div className="absolute top-8 left-8 flex flex-col w-[20vw]">
+        <div className="text-4xl my-4">{status}</div>
+        <button className="bg-blue-400 text-white rounded h-12 w-full mb-4" onClick={() => {
           setCards(shuffleArray(cards));
           setIsActive(true);
-        }}>Start</button>
-        <div className="text-2xl">Moves: {moves/2}</div>
-        <Timer isActive={isActive} setIsActive={setIsActive}/>
+          setStatus('The game is in progress');
+        }}>Start
+        </button>
+        <button className="bg-blue-400 text-white rounded h-12 w-full mb-4" onClick={() => {
+          setIsActive(false);
+          setSeconds(0);
+          setMoves(0);
+          resetCards();
+          setStatus('Start the game');
+        }}>Reset
+        </button>
+        <div className="text-2xl">Moves: {moves / 2}</div>
+        <Timer
+          seconds={seconds}
+          setSeconds={setSeconds}
+          isActive={isActive}
+          setIsActive={setIsActive}/>
       </div>
       {matches === cards.length / 2 && (<div className="text-3xl text-center">You have won</div>)}
       <div className="mx-auto grid grid-cols-4 w-[40vw] transition-all duration-1000 card-grid">

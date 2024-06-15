@@ -1,20 +1,21 @@
-import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from 'react';
+import React, {Dispatch, SetStateAction, useEffect, useRef} from 'react';
 
 export type TimerProps = {
     isActive: boolean,
-    setIsActive:  Dispatch<SetStateAction<boolean>>
+    setIsActive:  Dispatch<SetStateAction<boolean>>,
+    seconds: number,
+    setSeconds: Dispatch<SetStateAction<number>>,
 }
 
 const Timer = (props: TimerProps) => {
-  const [seconds, setSeconds] = useState(0);
   const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (props.isActive) {
       timerRef.current = window.setInterval(() => {
-        setSeconds((prevSeconds) => prevSeconds + 1);
+        props.setSeconds((prevSeconds) => prevSeconds + 1);
       }, 1000);
-    } else if (!props.isActive && seconds !== 0) {
+    } else if (!props.isActive && props.seconds !== 0) {
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
@@ -24,11 +25,11 @@ const Timer = (props: TimerProps) => {
         clearInterval(timerRef.current);
       }
     };
-  }, [props.isActive, seconds]);
+  }, [props.isActive, props.seconds]);
 
   return (
     <div>
-      <div>Timer: {seconds}s</div>
+      <div>Timer: {props.seconds}s</div>
     </div>
   );
 };
