@@ -123,6 +123,33 @@ const CardGrid = () => {
       id: 16,
       pairId: 8,
     },
+    {
+      name: 'Card 17',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/640px-Python-logo-notext.svg.png',
+      flipped: false,
+      id: 17,
+      pairId: 9,
+    },
+    {
+      name: 'Card 18',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/640px-Python-logo-notext.svg.png',
+      flipped: false,
+      id: 18,
+      pairId: 9,
+    },
+    {
+      name: 'Card 19',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/7/7d/Microsoft_.NET_logo.svg',
+      flipped: false,
+      id: 19,
+      pairId: 10,
+    },    {
+      name: 'Card 20',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/7/7d/Microsoft_.NET_logo.svg',
+      flipped: false,
+      id: 20,
+      pairId: 10,
+    },
   ]);
 
   const [matches, setMatches] = useState(0);
@@ -130,7 +157,8 @@ const CardGrid = () => {
   const [moves, setMoves] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
-  const [status, setStatus] = useState('Start the game');
+  const [status, setStatus] = useState('Click button to start the game');
+  const [gridSize, setGridSize] = useState(16);
 
   const shuffleArray = (array: Card[]) => {
     const newArray = array.slice();
@@ -193,6 +221,18 @@ const CardGrid = () => {
     <div>
       <div className="absolute top-8 left-8 flex flex-col w-[20vw]">
         <div className="text-4xl my-4">{status}</div>
+        <div className="text-xl">
+          Select grid size:
+          <select
+            className="m-4"
+            name="grid-size"
+            value={gridSize}
+            onChange={ event => setGridSize(Number(event.target.value))}
+          >
+            <option value={16}>4x4</option>
+            <option value={20}>5x4</option>
+          </select>
+        </div>
         <button className="bg-blue-400 text-white rounded h-12 w-full mb-4" onClick={() => {
           setCards(shuffleArray(cards));
           setIsActive(true);
@@ -204,7 +244,7 @@ const CardGrid = () => {
           setSeconds(0);
           setMoves(0);
           resetCards();
-          setStatus('Start the game');
+          setStatus('Click button to start the game');
         }}>Reset
         </button>
         <div className="text-2xl">Moves: {moves / 2}</div>
@@ -214,9 +254,9 @@ const CardGrid = () => {
           isActive={isActive}
           setIsActive={setIsActive}/>
       </div>
-      {matches === cards.length / 2 && (<div className="text-3xl text-center">You have won</div>)}
-      <div className="mx-auto grid grid-cols-4 w-[40vw] transition-all duration-1000 card-grid">
-        {cards.map( (card) => (
+      {matches === cards.length / 2 ? (<div className="text-3xl text-center">You have won</div>) : <div/>}
+      <div className="mx-auto grid grid-cols-4 w-[30vw] transition-all duration-1000 card-grid">
+        {gridSize === 20 ? cards.map( (card) => (
           <Card
             key={card.id}
             name={card.name}
@@ -225,7 +265,16 @@ const CardGrid = () => {
             flip={() => flipCard(card.id)}
             flipped={card.flipped}
           />
-        ))}
+        )) :  cards.slice(0,16).map( (card) => (
+          <Card
+            key={card.id}
+            name={card.name}
+            image={card.image}
+            id={card.id}
+            flip={() => flipCard(card.id)}
+            flipped={card.flipped}
+          />
+        )) }
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ export type CardProps = {
 }
 const Card = (props: CardProps) => {
   return (
-    <div className={`border-2 border-black w-24 h-36 m-4 transform transition-transform duration-1000 ${props.flipped ? 'rotate-y-180' : ''}`}>
+    <div className={`border-2 border-black w-24 h-36 m-2 transform transition-transform duration-1000 ${props.flipped ? 'rotate-y-180' : ''}`}>
       {props.flipped ? (
         <div className="h-full backface-hidden flex items-center justify-center border-black border-2 p-4 rounded">
           <img src={props.image}/>
