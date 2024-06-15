@@ -191,10 +191,6 @@ const CardGrid = () => {
   };
 
   const resetCards = () => {
-    // const newCards = cards.slice(0,gridSize).map(card => ({
-    //   ...card,
-    //   flipped: false
-    // }));
     setCards(INITIAL_CARDS);
   };
 
