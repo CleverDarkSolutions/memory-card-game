@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Card from './Card';
+import Timer from './Timer';
 
 export type Card = {
   name: string,
@@ -126,6 +127,8 @@ const CardGrid = () => {
 
   const [matches, setMatches] = useState(0);
   const [flippedCards, setFlippedCards] = useState<Array<number>>([]);
+  const [moves, setMoves] = useState(0);
+  const [isActive, setIsActive] = useState(false);
 
   const shuffleArray = (array: Card[]) => {
     // Create a copy of the array to avoid modifying the original array
@@ -167,6 +170,7 @@ const CardGrid = () => {
       );
       setTimeout(() => setCards(newCards), 200);
       setFlippedCards([...flippedCards, id]);
+      setMoves(moves + 1);
     }
   };
 
@@ -175,21 +179,35 @@ const CardGrid = () => {
       setTimeout( () => {checkCards();}, 1500);
     }
   }, [flippedCards]);
+
+  useEffect(() => {
+    if(matches === cards.length / 2) {
+      setIsActive(false);
+    }
+  }, [matches]);
   return(
-    <div className="mx-auto grid grid-cols-4 w-[40vw]">
-      {cards.map( (card) => (
-        <Card
-          key={card.id}
-          name={card.name}
-          image={card.image}
-          id={card.id}
-          flip={() => flipCard(card.id)}
-          flipped={card.flipped}
-        />
-      ))}
-      <div className="text-2xl">Matches: {matches}</div>
-      <div className="text-2xl">Flipped cards : {flippedCards.map(item => <div key={item}>{item}</div>)}</div>
-      <button onClick={() => setCards(shuffleArray(cards))}>Shuffle</button>
+    <div>
+      <div className="absolute top-8 left-8">
+        <button className="bg-blue-400 text-white rounded h-12 w-32" onClick={() => {
+          setCards(shuffleArray(cards));
+          setIsActive(true);
+        }}>Start</button>
+        <div className="text-2xl">Moves: {moves/2}</div>
+        <Timer isActive={isActive} setIsActive={setIsActive}/>
+      </div>
+      {matches === cards.length / 2 && (<div className="text-3xl text-center">You have won</div>)}
+      <div className="mx-auto grid grid-cols-4 w-[40vw] transition-all duration-1000 card-grid">
+        {cards.map( (card) => (
+          <Card
+            key={card.id}
+            name={card.name}
+            image={card.image}
+            id={card.id}
+            flip={() => flipCard(card.id)}
+            flipped={card.flipped}
+          />
+        ))}
+      </div>
     </div>
   );
 };
