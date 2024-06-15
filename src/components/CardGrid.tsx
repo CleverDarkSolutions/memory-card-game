@@ -159,6 +159,7 @@ const CardGrid = () => {
   const [isActive, setIsActive] = useState(false);
   const [status, setStatus] = useState('Click button to start the game');
   const [gridSize, setGridSize] = useState(16);
+  const [winningMessage, setWinningMessage] = useState('');
 
   const shuffleArray = (array: Card[]) => {
     const newArray = array.slice();
@@ -215,6 +216,7 @@ const CardGrid = () => {
   useEffect(() => {
     if(matches === cards.length / 2) {
       setIsActive(false);
+      setWinningMessage('You have won');
     }
   }, [matches]);
   return(
@@ -234,7 +236,7 @@ const CardGrid = () => {
           </select>
         </div>
         <button className="bg-blue-400 text-white rounded h-12 w-full mb-4" onClick={() => {
-          setCards(shuffleArray(cards));
+          gridSize === 20 ? setCards(shuffleArray(cards)) : setCards(shuffleArray(cards.slice(0,16)));
           setIsActive(true);
           setStatus('The game is in progress');
         }}>Start
@@ -245,18 +247,19 @@ const CardGrid = () => {
           setMoves(0);
           resetCards();
           setStatus('Click button to start the game');
+          setWinningMessage('');
         }}>Reset
         </button>
-        <div className="text-2xl">Moves: {moves / 2}</div>
+        <div className="text-2xl">Moves: {Math.round(moves / 2)}</div>
         <Timer
           seconds={seconds}
           setSeconds={setSeconds}
           isActive={isActive}
           setIsActive={setIsActive}/>
       </div>
-      {matches === cards.length / 2 ? (<div className="text-3xl text-center">You have won</div>) : <div/>}
+      <div className="text-2xl">{winningMessage}</div>
       <div className="mx-auto grid grid-cols-4 w-[30vw] transition-all duration-1000 card-grid">
-        {gridSize === 20 ? cards.map( (card) => (
+        {isActive && cards.map( (card) => (
           <Card
             key={card.id}
             name={card.name}
@@ -265,16 +268,7 @@ const CardGrid = () => {
             flip={() => flipCard(card.id)}
             flipped={card.flipped}
           />
-        )) :  cards.slice(0,16).map( (card) => (
-          <Card
-            key={card.id}
-            name={card.name}
-            image={card.image}
-            id={card.id}
-            flip={() => flipCard(card.id)}
-            flipped={card.flipped}
-          />
-        )) }
+        ))}
       </div>
     </div>
   );
